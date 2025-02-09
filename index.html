@@ -160,10 +160,10 @@
       endTimer();
     }
     async function startTimer() {
-      setCookie("hold", configData.hold, 30);
-      setCookie("rest", configData.rest, 30);
-      setCookie("rep", configData.rep, 30);
-      setCookie("dark", document.body.classList.contains("dark-mode") ? "true" : "false", 30);
+      setCookie("hold", configData.hold, 300);
+      setCookie("rest", configData.rest, 300);
+      setCookie("rep", configData.rep, 300);
+      setCookie("dark", document.body.classList.contains("dark-mode") ? "true" : "false", 300);
       document.getElementById("phaseLabel").innerText = "";
       hide(document.getElementById("config"));
       setTimeout(async () => {
