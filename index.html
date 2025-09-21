@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Kegel Timer</title>
     <meta name="description" content="Responsive Timer with adjustable Squeeze, Relax, and Reps." />
     <meta name="keywords" content="Timer, Squeeze, Relax, Reps" />
-
     <link rel="icon" type="image/x-icon" href="/img/favicon-16x16.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
@@ -15,309 +14,377 @@
     <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon-152x152.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon-120x120.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon-192x192.png" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Shippori+Antique&display=swap" rel="stylesheet" />
-	  
     <style>
-      :root {
-        --font: "Shippori Antique", serif;
-        --fade-duration: 200ms;
-      }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      html,
-      body {
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        font-family: var(--font);
-        background: #f9f9f9;
-        color: #333;
-      }
-      .dark-mode {
-        background-color: #333;
-        color: #fff;
-      }
-      .dark-mode button {
-        background: darkorange;
-      }
-      .container {
-        width: 100%;
-        height: 61.8vh;
-        padding: 0 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
-      #config,
-      #display {
-        width: 100%;
-        max-width: 600px;
-        transition: opacity var(--fade-duration) ease-in-out;
-      }
-      #config {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-      .settings {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .setting {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 110px;
-      }
-      .setting .label {
-        margin-bottom: 4px;
-        font-size: 1em;
-        white-space: nowrap;
-      }
-      .setting .value {
-        font-size: 1.5em;
-        margin: 4px 0;
-      }
-      button {
-        background: orange;
-        border: none;
-        color: #333;
-        padding: 8px;
-        margin: 4px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      button.start-button {
-        font-size: 1.5em;
-        padding: 12px 16px;
-	margin-top: 20px;
-      }
-      button.dark-mode-button {
-        font-size: 0.75em;
-        padding: 6px 8px;
-        margin-top: 20px;
-      }
-      .hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      #display {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        /* transform: translateY(-10vh); */
-      }
-      #phaseLabel {
-        font-size: 2em;
-        margin-bottom: 10px;
-      }
-      #timerContainer {
-        position: relative;
-        width: 150px;
-        height: 80px;
-        margin: 0 auto;
-      }
-      #timerContainer span {
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin: auto;
-        font-size: 3em;
-        transition: opacity var(--fade-duration) ease-in-out;
-      }
-      @media (max-width: 600px) {
+        :root {
+            --font: "Shippori Antique", serif;
+            --fade-duration: 200ms;
+            --bg: #f9f9f9;
+            --fg: #333;
+            --accent: #D2691E;
+            --button-bg: var(--accent);
+            --button-fg: #333;
+        }
+
+        .dark-mode {
+            --bg: #333;
+            --fg: #fff;
+            --accent: #D2691E;
+            --button-bg: var(--accent);
+            --button-fg: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--fg);
+            transition: background var(--fade-duration) ease, color var(--fade-duration) ease;
+        }
+
+        .container {
+            width: 100%;
+            height: 61.8vh;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #config, #display {
+            width: 100%;
+            max-width: 600px;
+            transition: opacity var(--fade-duration) ease-in-out;
+        }
+
+        #config {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
         .settings {
-          gap: 10px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
         }
+
         .setting {
-          min-width: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 110px;
         }
-      }
-      footer.copyright {
-        position: fixed;
-        bottom: 10px;
-        right: 10px;
-        font-size: 0.75em;
-        z-index: 1000;
-        color: inherit;
-      }
+
+            .setting .label {
+                margin-bottom: 4px;
+                font-size: 1.2em;
+                white-space: nowrap;
+            }
+
+            .setting .value {
+                font-size: 1.5em;
+                margin: 4px 0;
+            }
+
+        button {
+            background: var(--button-bg);
+            border: none;
+            color: var(--button-fg);
+            padding: 8px;
+            margin: 4px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background var(--fade-duration) ease, color var(--fade-duration) ease;
+        }
+
+            button.start-button {
+                font-size: 1.5em;
+                padding: 12px 16px;
+                margin-top: 40px;
+            }
+
+            button.dark-mode-button {
+                font-size: 0.75em;
+                padding: 6px 8px;
+                margin-top: 20px;
+            }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #phaseLabel {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: var(--fg);
+            transition: color var(--fade-duration) ease;
+        }
+
+            #phaseLabel.phase-squeeze {
+                color: var(--accent);
+            }
+
+        #timerContainer {
+            position: relative;
+            width: 150px;
+            height: 80px;
+            margin: 0 auto;
+        }
+
+            #timerContainer span {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: auto;
+                font-size: 3em;
+                transition: opacity var(--fade-duration) ease-in-out;
+            }
+
+        #repLabel {
+            margin-top: 8px;
+            font-size: 1em;
+            min-height: 1.2em;
+            color: var(--fg);
+            transition: color var(--fade-duration) ease;
+        }
+
+        @media (max-width: 600px) {
+            .settings {
+                gap: 10px;
+            }
+
+            .setting {
+                min-width: 90px;
+            }
+        }
+
+        footer.copyright {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.75em;
+            z-index: 1000;
+            color: inherit;
+        }
+
+        .setting button {
+            font-size: 1.2em;
+            font-weight: bold;
+            line-height: 1;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <div id="config">
-        <div class="settings">
-          <div class="setting">
-            <div class="label">Squeeze</div>
-            <button onclick="update('hold', 1)">+</button>
-            <div class="value"><span id="hold">5</span></div>
-            <button onclick="update('hold', -1)">–</button>
-          </div>
-          <div class="setting">
-            <div class="label">Relax</div>
-            <button onclick="update('rest', 1)">+</button>
-            <div class="value"><span id="rest">5</span></div>
-            <button onclick="update('rest', -1)">–</button>
-          </div>
-          <div class="setting">
-            <div class="label">Reps</div>
-            <button onclick="update('rep', 1)">+</button>
-            <div class="value"><span id="rep">5</span></div>
-            <button onclick="update('rep', -1)">–</button>
-          </div>
+        <div id="config">
+            <div class="settings">
+                <div class="setting">
+                    <div class="label">Squeeze</div>
+                    <button onclick="update('hold', 1)">+</button>
+                    <div class="value"><span id="hold">5</span></div>
+                    <button onclick="update('hold', -1)">–</button>
+                </div>
+                <div class="setting">
+                    <div class="label">Relax</div>
+                    <button onclick="update('rest', 1)">+</button>
+                    <div class="value"><span id="rest">5</span></div>
+                    <button onclick="update('rest', -1)">–</button>
+                </div>
+                <div class="setting">
+                    <div class="label">Reps</div>
+                    <button onclick="update('rep', 1)">+</button>
+                    <div class="value"><span id="rep">5</span></div>
+                    <button onclick="update('rep', -1)">–</button>
+                </div>
+            </div>
+            <button class="start-button" onclick="startTimer()">Start</button>
+            <button class="dark-mode-button" onclick="toggleDarkMode()">Dark Mode</button>
         </div>
-        <button class="start-button" onclick="startTimer()">Start</button>
-        <button class="dark-mode-button" onclick="toggleDarkMode()">Dark Mode</button>
-      </div>
-      <div id="display" class="hidden" style="display: none;">
-        <h2 id="phaseLabel"></h2>
-        <div id="timerContainer">
-          <span id="timerDisplay">0</span>
-          <span id="timerDisplayNew" style="opacity: 0;">0</span>
+        <div id="display" class="hidden" style="display: none;">
+            <h2 id="phaseLabel"></h2>
+            <div id="timerContainer">
+                <span id="timerDisplay">0</span>
+                <span id="timerDisplayNew" style="opacity: 0;">0</span>
+            </div>
+            <div id="repLabel"></div>
         </div>
-      </div>
     </div>
+
     <script>
-      const sleep = ms => new Promise(r => setTimeout(r, ms));
-      function getCookie(name) {
-        const value = "; " + document.cookie;
-        const parts = value.split("; " + name + "=");
-        if (parts.length === 2) return parts.pop().split(";").shift();
-      }
-      function setCookie(name, value, days) {
-        let expires = "";
-        if (days) {
-          const date = new Date();
-          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-          expires = "; expires=" + date.toUTCString();
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        function getCookie(name) {
+            const value = "; " + document.cookie;
+            const parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
         }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-      }
-      function loadConfigFromCookie() {
-        ["hold", "rest", "rep"].forEach(key => {
-          const cookieVal = getCookie(key);
-          if (cookieVal) configData[key] = parseInt(cookieVal);
-          document.getElementById(key).innerText = configData[key];
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+        function loadConfigFromCookie() {
+            ["hold", "rest", "rep"].forEach(key => {
+                const cookieVal = getCookie(key);
+                if (cookieVal) configData[key] = parseInt(cookieVal, 10);
+                const el = document.getElementById(key);
+                if (el) el.textContent = configData[key];
+            });
+        }
+        const configData = { hold: 5, rest: 5, rep: 5 };
+        loadConfigFromCookie();
+
+        function update(key, delta) {
+            configData[key] = Math.max(1, configData[key] + delta);
+            const el = document.getElementById(key);
+            if (el) el.textContent = configData[key];
+        }
+
+        const show = el => {
+            el.style.display = el.id === "display" || el.id === "config" ? "flex" : "block";
+            void el.offsetWidth;
+            el.classList.remove("hidden");
+            el.style.opacity = 1;
+        };
+        const hide = el => {
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.classList.add("hidden");
+                el.style.display = "none";
+            }, 200);
+        };
+
+        let currentDisplay = "timerDisplay";
+        function crossFade(newText) {
+            const curr = document.getElementById(currentDisplay),
+                next = document.getElementById(currentDisplay === "timerDisplay" ? "timerDisplayNew" : "timerDisplay");
+            next.textContent = newText;
+            next.style.opacity = 0;
+            next.offsetHeight;
+            curr.style.opacity = 0;
+            next.style.opacity = 1;
+            currentDisplay = currentDisplay === "timerDisplay" ? "timerDisplayNew" : "timerDisplay";
+        }
+
+        function setPhase(phase) {
+            const el = document.getElementById("phaseLabel");
+            el.textContent = phase;
+            if (phase === "Squeeze") el.classList.add("phase-squeeze");
+            else el.classList.remove("phase-squeeze");
+        }
+
+        async function preCountdown(msgs) {
+            const repLabelEl = document.getElementById("repLabel");
+            repLabelEl.textContent = "";
+            for (let m of msgs) {
+                crossFade(m);
+                await sleep(800);
+            }
+        }
+
+        async function runCountdown(sec, phase) {
+            setPhase(phase);
+            for (let i = sec; i >= 0; i--) {
+                crossFade(i);
+                await sleep(800);
+            }
+        }
+
+        async function runCountdownImmediate(sec, phase) {
+            setPhase(phase);
+            const currentEl = document.getElementById(currentDisplay);
+            for (let i = sec; i >= 0; i--) {
+                currentEl.textContent = i;
+                await sleep(800);
+            }
+        }
+
+        async function runCycles(cycles) {
+            if (cycles > 0) {
+                for (let rep = 1; rep <= cycles; rep++) {
+                    const repLabelEl = document.getElementById("repLabel");
+                    repLabelEl.textContent = "Rep " + rep;
+                    await runCountdownImmediate(configData.hold, "Squeeze");
+                    if (rep < cycles) {
+                        await runCountdown(configData.rest, "Relax");
+                    }
+                    repLabelEl.textContent = "";
+                }
+            }
+            endTimer();
+        }
+
+        async function startTimer() {
+            setCookie("hold", configData.hold, 300);
+            setCookie("rest", configData.rest, 300);
+            setCookie("rep", configData.rep, 300);
+            setCookie("dark", document.body.classList.contains("dark-mode") ? "true" : "false", 300);
+            setPhase("");
+            hide(document.getElementById("config"));
+            setTimeout(async () => {
+                show(document.getElementById("display"));
+                await preCountdown(["3", "2", "1", "Start!"]);
+                await runCycles(configData.rep);
+            }, 200);
+        }
+
+        function endTimer() {
+            hide(document.getElementById("display"));
+            setTimeout(() => show(document.getElementById("config")), 200);
+        }
+
+        function toggleDarkMode() {
+            const isNowDark = document.body.classList.toggle("dark-mode");
+            setCookie("dark", isNowDark ? "true" : "false", 300);
+        }
+
+        window.addEventListener("load", () => {
+            let darkCookie = getCookie("dark");
+            if (darkCookie !== undefined && darkCookie !== null) {
+                darkCookie === "true" ? document.body.classList.add("dark-mode") : document.body.classList.remove("dark-mode");
+            } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                document.body.classList.add("dark-mode");
+            }
         });
-      }
-      const configData = { hold: 5, rest: 5, rep: 5 };
-      loadConfigFromCookie();
-      function update(key, delta) {
-        configData[key] = Math.max(1, configData[key] + delta);
-        document.getElementById(key).innerText = configData[key];
-      }
-      const show = el => {
-        el.style.display =
-          el.id === "display" || el.id === "config" ? "flex" : "block";
-        void el.offsetWidth;
-        el.classList.remove("hidden");
-        el.style.opacity = 1;
-      };
-      const hide = el => {
-        el.style.opacity = 0;
-        setTimeout(() => {
-          el.classList.add("hidden");
-          el.style.display = "none";
-        }, 200);
-      };
-      let currentDisplay = "timerDisplay";
-      function crossFade(newText) {
-        const curr = document.getElementById(currentDisplay),
-          next = document.getElementById(
-            currentDisplay === "timerDisplay" ? "timerDisplayNew" : "timerDisplay"
-          );
-        next.innerText = newText;
-        next.style.opacity = 0;
-        next.offsetHeight;
-        curr.style.opacity = 0;
-        next.style.opacity = 1;
-        currentDisplay =
-          currentDisplay === "timerDisplay" ? "timerDisplayNew" : "timerDisplay";
-      }
-      async function preCountdown(msgs) {
-        for (let m of msgs) {
-          crossFade(m);
-          await sleep(800);
-        }
-      }
-      async function runCountdown(sec, phase) {
-        document.getElementById("phaseLabel").innerText = phase;
-        for (let i = sec; i >= 0; i--) {
-          crossFade(i);
-          await sleep(800);
-        }
-      }
-      async function runCountdownImmediate(sec, phase) {
-        document.getElementById("phaseLabel").innerText = phase;
-        const currentEl = document.getElementById(currentDisplay);
-        for (let i = sec; i >= 0; i--) {
-          currentEl.innerText = i;
-          await sleep(800);
-        }
-      }
-      async function runCycles(cycles) {
-        if (cycles > 0) {
-          await runCountdownImmediate(configData.hold, "Squeeze");
-          for (let i = 1; i < cycles; i++) {
-            await runCountdown(configData.rest, "Relax");
-            await runCountdown(configData.hold, "Squeeze");
-          }
-        }
-        endTimer();
-      }
-      async function startTimer() {
-        setCookie("hold", configData.hold, 300);
-        setCookie("rest", configData.rest, 300);
-        setCookie("rep", configData.rep, 300);
-        setCookie(
-          "dark",
-          document.body.classList.contains("dark-mode") ? "true" : "false",
-          300
-        );
-        document.getElementById("phaseLabel").innerText = "";
-        hide(document.getElementById("config"));
-        setTimeout(async () => {
-          show(document.getElementById("display"));
-          await preCountdown(["3", "2", "1", "Start!"]);
-          await runCycles(configData.rep);
-        }, 200);
-      }
-      function endTimer() {
-        hide(document.getElementById("display"));
-        setTimeout(() => show(document.getElementById("config")), 200);
-      }
-      function toggleDarkMode() {
-        document.body.classList.toggle("dark-mode");
-      }
-      window.addEventListener("load", () => {
-        let darkCookie = getCookie("dark");
-        if (darkCookie !== undefined && darkCookie !== null) {
-          darkCookie === "true"
-            ? document.body.classList.add("dark-mode")
-            : document.body.classList.remove("dark-mode");
-        } else if (
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        ) {
-          document.body.classList.add("dark-mode");
-        }
-      });
     </script>
-    <footer class="copyright">
-      © 2025 LTG
-    </footer>
-  </body>
+
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+    <script>
+        kofiWidgetOverlay.draw('kegeltimer', {
+            'type': 'floating-chat',
+            'floating-chat.donateButton.text': 'Tip Me',
+            'floating-chat.donateButton.background-color': '#D2691E',
+            'floating-chat.donateButton.text-color': '#fff'
+        });
+    </script>
+
+    <footer class="copyright">© 2025 LTG</footer>
+</body>
 </html>
