@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Kegel Timer</title>
-    <meta name="description" content="Responsive Timer with adjustable Squeeze, Relax, and Reps." />
-    <meta name="keywords" content="Timer, Squeeze, Relax, Reps" />
+    <meta name="description" content="A simple Kegel exercise timer with customizable squeeze, relax, and repetition settings." />
+    <meta name="keywords" content="Kegel, exercise, timer, squeeze, relax, reps, pelvic floor" />
     <link rel="icon" type="image/x-icon" href="/img/favicon-16x16.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
@@ -25,7 +25,7 @@
             --fg: #333;
             --accent: #D2691E;
             --button-bg: var(--accent);
-            --button-fg: #333;
+            --button-fg: #fff;
         }
 
         .dark-mode {
@@ -217,7 +217,7 @@
                 <div class="setting">
                     <div class="label">Reps</div>
                     <button onclick="update('rep', 1)">+</button>
-                    <div class="value"><span id="rep">5</span></div>
+                    <div class="value"><span id="rep">10</span></div>
                     <button onclick="update('rep', -1)">–</button>
                 </div>
             </div>
